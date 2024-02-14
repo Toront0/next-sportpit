@@ -9,7 +9,7 @@ import { HiArrowSmLeft } from "react-icons/hi";
 
 import { useCartState } from "@/lib/store/store";
 
-const page = () => {
+const Cart = () => {
   const cartState = useCartState();
 
   const totalPrice = cartState.items.reduce((acc, val) => {
@@ -105,4 +105,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Cart;

@@ -9,7 +9,7 @@ import { HiArrowSmLeft } from "react-icons/hi";
 import FavoritesItem from "@/components/favorites/FavoritesItem";
 import { useFavoriteState } from "@/lib/store/store";
 
-const page = () => {
+const Favorites = () => {
   const favoriteItems = useFavoriteState((s) => s.items);
 
   return (
@@ -46,4 +46,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Favorites;
