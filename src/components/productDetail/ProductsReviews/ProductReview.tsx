@@ -38,11 +38,11 @@ const ProductReview = ({
             {user.first_name} {user.last_name}
           </h3>
           <div className="flex text-black dark:text-[#e0f44a] gap-1">
-            {Array.from({ length: rating }).map((s) => (
-              <FaStar />
+            {Array.from({ length: rating }).map((s, i) => (
+              <FaStar key={i} />
             ))}
-            {Array.from({ length: 5 - rating }).map((s) => (
-              <FaRegStar />
+            {Array.from({ length: 5 - rating }).map((s, i) => (
+              <FaRegStar key={i} />
             ))}
           </div>
           <span className="text-xs text-gray-7 dark:text-gray-9">
