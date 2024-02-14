@@ -1,0 +1,52 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  previewFeatures = ["fullTextSearch"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model products {
+  id      Int      @id @default(autoincrement())
+  title   String
+  img String
+  description String
+  price Int
+  in_stock Int
+  category String @default("protein")
+  brand String
+  made_in String
+  weight Int
+  amount_of_portion Int
+  release_form String
+}
+
+
+model users {
+  id      Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  email String @unique
+  first_name String
+  last_name String
+  password String
+  is_verified Boolean @default(false)
+  profile_img String @default("https://ybsgxbwroouqabsywdht.supabase.co/storage/v1/object/sign/default_sys/def_avatar.png?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJkZWZhdWx0X3N5cy9kZWZfYXZhdGFyLnBuZyIsImlhdCI6MTcwNzgzODY2MSwiZXhwIjoxNzM5Mzc0NjYxfQ.H2CjXQiTs1uC8Jk-J4Ixl9JCVL2l8YaemqT6MHeYSXk&t=2024-02-13T15%3A37%3A44.791Z")
+  city String 
+  comments comments[]
+}
+
+model comments {
+  id      Int      @id @default(autoincrement())
+  created_at DateTime @default(now())
+  rating Int @default(0)
+  review String
+  userId Int 
+  user users @relation(fields: [userId], references: [id])
+  productId Int 
+}
