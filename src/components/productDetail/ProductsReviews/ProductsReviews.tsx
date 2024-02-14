@@ -55,6 +55,7 @@ const ProductsReviews = ({ productId }: IProductsReviews) => {
               <>
                 {comments.reviews?.map((c) => (
                   <ProductReview
+                    key={c.id}
                     id={c.id}
                     createdAt={c.createdAt}
                     user={c.user}
