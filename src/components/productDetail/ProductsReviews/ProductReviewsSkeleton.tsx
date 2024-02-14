@@ -7,8 +7,8 @@ interface IProductReviewsSkeleton {
 const ProductReviewsSkeleton = ({ itemsToRender }: IProductReviewsSkeleton) => {
   return (
     <>
-      {Array.from({ length: itemsToRender || 10 }).map((c) => (
-        <div className="w-full animate-pulse flex gap-2 ">
+      {Array.from({ length: itemsToRender || 10 }).map((c, i) => (
+        <div key={i} className="w-full animate-pulse flex gap-2 ">
           <div className="min-w-[40px] h-10 rounded-full bg-gray-4"></div>
           <div className="w-full ">
             <div className="w-1/4 bg-gray-4 h-4"></div>
