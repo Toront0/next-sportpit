@@ -39,7 +39,7 @@ export type FilterData = {
   madeIn: string[];
 };
 
-const page = () => {
+const ProductsPage = () => {
   // const data = (await prisma.product.findMany()) as unknown as IProductItem[];
   const [filters, setFilters] = useState({} as FilterData);
   const [data, setData] = useState({} as ResType);
@@ -126,4 +126,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default ProductsPage;

@@ -19,7 +19,7 @@ export type ProductDetail = {
   description: string;
 };
 
-const page = async ({ params }: { params: { slug: string } }) => {
+const ProductDetail = async ({ params }: { params: { slug: string } }) => {
   const user = await getServerSession(authOptions);
 
   const data = await prisma.products.findUnique({
@@ -58,4 +58,4 @@ const page = async ({ params }: { params: { slug: string } }) => {
   );
 };
 
-export default page;
+export default ProductDetail;
