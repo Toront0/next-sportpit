@@ -1,14 +1,10 @@
 import React from "react";
-import { getServerSession } from "next-auth";
 
-import img from "/public/protein_2.png";
 import Image from "next/image";
 import ProductInfo from "@/components/productDetail/productInfo";
 import Header from "@/components/Header/Header";
 
 import prisma from "@/lib/db";
-import { IProductItem } from "@/components/products/ProductItem";
-import { authOptions } from "@/lib/types/next_auth";
 
 export type ProductDetail = {
   id: number;
@@ -22,11 +18,9 @@ export type ProductDetail = {
 
 const ProductDetail = async ({ params }: { params: { slug: string } }) => {
   // const res = await fetch(`/api/product-detail/${+params.slug}`);
-  const data = await prisma.products.findUnique({
-    where: {
-      id: +params.slug
-    }
-  });
+  const [data] = await prisma.$queryRaw<
+    ProductDetail[]
+  >`Select t1.id, t1.title, t1.img,  t1.description, t1.price, t1.category, avg(coalesce(t2.rating, 0)) as avgRating from products t1 left join comments t2 on t1.id = t2.product_id where t1.id = ${+params.slug} group by t1.id`;
 
   return (
     <div className="w-full h-full overflow-y-auto ">
@@ -43,7 +37,7 @@ const ProductDetail = async ({ params }: { params: { slug: string } }) => {
               id={data?.id}
               title={data?.title}
               category={data.category}
-              avgrating={5}
+              avgrating={+data.avgrating.toString()}
               description={data?.description}
               price={data?.price}
               img={data?.img}
