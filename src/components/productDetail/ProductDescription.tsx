@@ -78,7 +78,7 @@ const ProductDescription = ({
         </span>
         <div className="flex gap-1 text-xs lg:text-base items-center text-black dark:text-[#e0f44a]">
           {Array.from({ length: 5 }).map((_, i) => (
-            <div>
+            <div key={i}>
               {avgrating - i >= 1 ? (
                 <FaStar />
               ) : avgrating - i <= 1 && avgrating - i > 0 ? (
