@@ -8,6 +8,7 @@ import { clamp } from "@/lib/utils/clamp";
 import { IProductsFilter } from "./ProductsFilter";
 import { useSWRConfig } from "swr";
 import { fetcher } from "@/lib/helpers/helpers";
+import DoubleRangeInput from "../UI/DoubleRangeInput";
 
 interface IFilterModal {
   filters: FilterData;
@@ -19,7 +20,16 @@ interface IFilterModal {
 
 type FilterData = {
   brands: string[];
-  madeIn: string[];
+  made_in: string[];
+  release_form: string[];
+  category: string[];
+};
+
+type CheckboxTypes = {
+  brands: string;
+  made_in: string;
+  release_form: string;
+  category: string;
 };
 
 const FilterModal = ({
@@ -31,21 +41,20 @@ const FilterModal = ({
 }: IFilterModal) => {
   const [allBrands, setAllBrands] = useState({} as FilterData);
   const [priceRange, setPriceRange] = useState(0);
-  const [priceRange2, setPriceRange2] = useState(450);
-  const { mutate } = useSWRConfig();
-
-  const fRef = useRef<HTMLDivElement>();
-
-  const test = {
-    min: 0,
-    max: 20890
-  };
+  const [priceRange2, setPriceRange2] = useState(0);
+  const [weightRange, setWeightRange] = useState(0);
+  const [weightRange2, setWeightRange2] = useState(0);
 
   useEffect(() => {
     const handler = async () => {
       const res = await fetch(`${window.location.origin}/api/product-filter`);
 
       const data = await res.json();
+
+      setPriceRange2(data.max_price);
+      setWeightRange2(data.max_weight);
+      setPriceRange(data.min_price);
+      setWeightRange(data.min_weight);
 
       setAllBrands(data);
     };
@@ -55,7 +64,7 @@ const FilterModal = ({
 
   console.log(allBrands);
 
-  const onCheckbox = (n: string, name: keyof typeof filters) => {
+  const onCheckbox = (n: string, name: keyof CheckboxTypes) => {
     if (!filters[name]) {
       setFilters((prev) => {
         return {
@@ -66,7 +75,7 @@ const FilterModal = ({
       return;
     }
 
-    if (filters[name].includes(n)) {
+    if (typeof name === "string" && filters[name].includes(n)) {
       setFilters((prev) => {
         return {
           ...prev,
@@ -109,65 +118,48 @@ const FilterModal = ({
                 ))}
               </div>
             </Accordion>
+            <Accordion title="Страна производитель">
+              <div className="flex flex-col gap-2">
+                {allBrands.made_in?.map((b) => (
+                  <Checkbox
+                    key={b}
+                    label={b}
+                    name="made_in"
+                    checked={filters.made_in?.includes(b)}
+                    onChange={(e) => onCheckbox(b, "made_in")}
+                  />
+                ))}
+              </div>
+            </Accordion>
+            <Accordion title="Категория">
+              <div className="flex flex-col gap-2">
+                {allBrands.category?.map((b) => (
+                  <Checkbox
+                    key={b}
+                    label={b}
+                    name="category"
+                    checked={filters.category?.includes(b)}
+                    onChange={(e) => onCheckbox(b, "category")}
+                  />
+                ))}
+              </div>
+            </Accordion>
+            <Accordion title="Форма выпуска">
+              <div className="flex flex-col gap-2">
+                {allBrands.release_form?.map((b) => (
+                  <Checkbox
+                    key={b}
+                    label={b}
+                    name="release_form"
+                    checked={filters.release_form?.includes(b)}
+                    onChange={(e) => onCheckbox(b, "release_form")}
+                  />
+                ))}
+              </div>
+            </Accordion>
 
             <div>
-              <h3 className="text-gray-2 dark:text-gray-14 font-medium">
-                Ценовой диапозон
-              </h3>
-              <div className="w-full mt-4 flex items-center justify-between">
-                <div className="w-12 flex justify-center py-1 rounded bg-white dark:bg-black text-sm text-black dark:text-white font-medium">
-                  {priceRange}
-                </div>
-                <div className="w-12 flex justify-center py-1 rounded bg-white dark:bg-black text-sm text-black dark:text-white font-medium">
-                  {priceRange2}
-                </div>
-              </div>
-              <div className="mt-6 flex">
-                <div
-                  ref={fRef as React.RefObject<HTMLDivElement>}
-                  className="w-1/2 h-1  relative bg-white dark:bg-black"
-                >
-                  <div className="w-[calc(100%-16px)] h-full relative">
-                    <div
-                      style={{ left: (priceRange / test.max) * 100 + "%" }}
-                      className="w-5 h-5 rounded-full bg-gray-4 dark:bg-gray-12 absolute top-1/2 -translate-y-1/2"
-                    ></div>
-                  </div>
-                  <input
-                    type="range"
-                    name="minPrice"
-                    id="minPrice"
-                    min={0}
-                    max={test.max}
-                    value={priceRange}
-                    // onChange={(e) => setPriceRange(+e.target.value)}
-                    onChange={(e) => setPriceRange(+e.target.value)}
-                    className="w-full absolute"
-                  />
-                </div>
-                <div
-                  ref={fRef as React.RefObject<HTMLDivElement>}
-                  className="w-1/2 h-1  relative bg-white dark:bg-black"
-                >
-                  <div className="w-[calc(100%-16px)] h-full relative">
-                    <div
-                      style={{ left: (priceRange2 / test.max) * 100 + "%" }}
-                      className="w-5 h-5 rounded-full bg-gray-4 dark:bg-gray-12 absolute top-1/2 -translate-y-1/2"
-                    ></div>
-                  </div>
-                  <input
-                    type="range"
-                    name="minPrice"
-                    id="minPrice"
-                    min={0}
-                    max={test.max}
-                    value={priceRange2}
-                    // onChange={(e) => setPriceRange(+e.target.value)}
-                    onChange={(e) => setPriceRange2(+e.target.value)}
-                    className="w-full absolute"
-                  />
-                </div>
-              </div>
+              <h3 className="text-gray-2 dark:text-gray-14 font-medium"></h3>
             </div>
           </div>
           <div className="flex gap-2">

@@ -30,7 +30,7 @@ const Accordion = ({ children, title }: IAccordion) => {
           isExpanded ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
         }`}
       >
-        <div className=" overflow-hidden mt-2">{children}</div>
+        <div className=" overflow-hidden my-2">{children}</div>
       </div>
     </div>
   );

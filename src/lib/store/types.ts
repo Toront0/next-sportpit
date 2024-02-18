@@ -1,3 +1,4 @@
+import { ProductItemPreviewType } from "@/app/products/page";
 import { ICartItem } from "../types/types";
 
 export interface IUseCartState {
@@ -37,5 +38,17 @@ export interface IUseFavoritesState {
   items: FavoriteItemType[];
   addItemToFavorites: (val: FavoriteItemType) => void;
   deleteItemFromFavorites: (id: number) => void;
+  syncWithLocalStorage: () => void;
+}
+
+type ComparisonItem = {
+  id: number;
+  category: string;
+};
+
+export interface IUseComparisonState {
+  items: ComparisonItem[];
+  addItemToComparison: (v: ComparisonItem) => void;
+  deleteItemFromComparison: (id: number) => void;
   syncWithLocalStorage: () => void;
 }

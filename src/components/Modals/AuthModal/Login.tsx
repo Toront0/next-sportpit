@@ -1,10 +1,13 @@
 import Input from "@/components/UI/Input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
-import React from "react";
+import React, { useState } from "react";
 
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
+import WrongCredentials from "./WrongCredentials";
+import ChangePassword from "../ChangePassword/ChangePassword";
+import PasswordInput from "@/components/UI/PasswordInput";
 
 const schema = z.object({
   email: z.string().min(1),
@@ -13,26 +16,43 @@ const schema = z.object({
 
 type FormFields = z.infer<typeof schema>;
 
-const Login = () => {
+interface ILogin {
+  onClose: () => void;
+}
+
+const Login = ({ onClose }: ILogin) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isValid }
   } = useForm<FormFields>({ resolver: zodResolver(schema) });
+  const [wrongCredentials, setWrongCredentials] = useState(false);
+  const [openPasswordForgetModal, setOpenPasswordForgetModal] = useState(false);
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     console.log("res", data);
 
     const res = await signIn("credentials", {
       email: data.email,
-      password: data.password
+      password: data.password,
+      redirect: false
     });
+
+    if (res?.status === 401) {
+      setWrongCredentials(true);
+      return;
+    }
+    onClose();
 
     console.log("res", res);
   };
 
   return (
     <form className="mt-4" onSubmit={handleSubmit(onSubmit)}>
+      {openPasswordForgetModal && (
+        <ChangePassword onClose={() => setOpenPasswordForgetModal(false)} />
+      )}
+      {wrongCredentials && <WrongCredentials />}
       <div>
         <label
           htmlFor="email"
@@ -56,7 +76,7 @@ const Login = () => {
           Пароль
         </label>
 
-        <Input
+        <PasswordInput
           name="password"
           register={register}
           placeholder="********"
@@ -65,6 +85,7 @@ const Login = () => {
       </div>
       <button
         type="button"
+        onClick={() => setOpenPasswordForgetModal(true)}
         className="dark:text-blue-10 text-blue-8 text-xs hover:underline"
       >
         Забыли пароль?

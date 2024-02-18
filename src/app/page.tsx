@@ -17,7 +17,7 @@ export default function Home() {
         <main className="w-full h-full">
           <Hero />
           <WorksWith />
-          <Slider
+          {/* <Slider
             blockTitle="Популярные товары"
             items={[
               {
@@ -52,9 +52,9 @@ export default function Home() {
               },
               { id: 13, title: "Protein", price: 2100, avgRating: 4, img: img }
             ]}
-          />
+          /> */}
           <AdvantagesBlock />
-          <Slider
+          {/* <Slider
             blockTitle="Новые поступления"
             items={[
               {
@@ -89,7 +89,7 @@ export default function Home() {
               },
               { id: 13, title: "Protein", price: 2100, avgRating: 4, img: img }
             ]}
-          />
+          /> */}
           <CTABlock />
         </main>
         {/* <Footer /> */}

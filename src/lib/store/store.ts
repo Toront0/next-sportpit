@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import {
   IUseCartState,
+  IUseComparisonState,
   IUseFavoritesState,
   IUseTheme,
   IUseToaster
@@ -116,6 +117,30 @@ export const useFavoriteState = create<IUseFavoritesState>((set, get) => ({
   syncWithLocalStorage() {
     if (global?.window && typeof window !== undefined) {
       const res = window.localStorage.getItem("favorite-items");
+
+      if (res) {
+        set({ items: JSON.parse(res) });
+      }
+    }
+  }
+}));
+
+export const useComparisonState = create<IUseComparisonState>((set, get) => ({
+  items: [],
+  addItemToComparison(v) {
+    const updatedData = get().items.concat(v);
+    localStorage.setItem("comparison-items", JSON.stringify(updatedData));
+    set({ items: updatedData });
+  },
+  deleteItemFromComparison(id) {
+    const updatedData = get().items.filter((v) => v.id !== id);
+
+    localStorage.setItem("comparison-items", JSON.stringify(updatedData));
+    set({ items: updatedData });
+  },
+  syncWithLocalStorage() {
+    if (global?.window && typeof window !== undefined) {
+      const res = window.localStorage.getItem("comparison-items");
 
       if (res) {
         set({ items: JSON.parse(res) });

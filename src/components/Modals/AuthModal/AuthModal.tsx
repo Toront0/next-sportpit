@@ -44,7 +44,11 @@ const AuthModal = ({ onClose }: IAuthModal) => {
             Регистрация
           </button>
         </div>
-        {currentAuthMethod === "login" ? <Login /> : <SignUp />}
+        {currentAuthMethod === "login" ? (
+          <Login onClose={onClose} />
+        ) : (
+          <SignUp setCurrentAuthMethod={setCurrentAuthMethod} />
+        )}
       </div>
     </ModalPortal>
   );

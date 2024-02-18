@@ -3,7 +3,7 @@ import { createPortal } from "react-dom";
 
 interface IModalPortal {
   children: React.ReactNode;
-  onClose: () => void;
+  onClose?: () => void;
 }
 
 const ModalPortal = ({ children, onClose }: IModalPortal) => {

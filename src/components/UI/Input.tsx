@@ -1,8 +1,5 @@
-import { forwardRef } from "react";
-import { UseFormRegister, FieldValues } from "react-hook-form";
-
 interface IInput extends React.InputHTMLAttributes<HTMLInputElement> {
-  register: any;
+  register?: any;
   error?: boolean;
   name: string;
 }

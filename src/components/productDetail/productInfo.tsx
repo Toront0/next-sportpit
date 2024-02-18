@@ -7,14 +7,17 @@ import { Prisma } from "@prisma/client";
 import ProductDescription from "./ProductDescription";
 import ProductsReviews from "./ProductsReviews/ProductsReviews";
 import { IProductItem } from "../products/ProductItem";
+import { ProductDetail } from "@/app/products/[slug]/page";
 
 const ProductInfo = ({
   description,
   title,
   price,
   id,
-  img
-}: Prisma.productsGetPayload<true>) => {
+  img,
+  category,
+  avgrating
+}: ProductDetail) => {
   const [currentState, setCurrentState] = useState<
     "description" | "reviews" | "characteristics"
   >("description");
@@ -60,6 +63,8 @@ const ProductInfo = ({
               price={price}
               id={id}
               img={img}
+              category={category}
+              avgrating={avgrating}
             />
           ) : currentState === "reviews" ? (
             <ProductsReviews productId={id} />

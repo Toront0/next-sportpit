@@ -66,9 +66,13 @@ const ProductsFilter = ({
   }, [debounced, page]);
 
   const onCloseInput = () => {
-    if (searchInput.length > 0) {
-      setSearchInput("");
+    setSearchInput("");
+
+    if (expandSearchbar) {
+      setApplyFilters((p) => !p);
+      if (page > 0) setPage(0);
     }
+
     setExpandSearchbar((p) => !p);
   };
 

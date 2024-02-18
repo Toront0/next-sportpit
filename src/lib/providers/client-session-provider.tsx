@@ -2,7 +2,7 @@
 
 import { SessionProvider } from "next-auth/react";
 import { useEffect } from "react";
-import { useFavoriteState } from "../store/store";
+import { useComparisonState, useFavoriteState } from "../store/store";
 
 export function ClientSessionProvider({
   children
@@ -11,6 +11,7 @@ export function ClientSessionProvider({
 }) {
   useEffect(() => {
     useFavoriteState.getState().syncWithLocalStorage();
+    useComparisonState.getState().syncWithLocalStorage();
   }, []);
 
   return <SessionProvider>{children}</SessionProvider>;

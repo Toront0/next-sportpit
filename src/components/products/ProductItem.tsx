@@ -1,13 +1,21 @@
 "use client";
 
-import { useCartState, useFavoriteState } from "@/lib/store/store";
+import {
+  useCartState,
+  useComparisonState,
+  useFavoriteState
+} from "@/lib/store/store";
 import Image, { StaticImageData } from "next/image";
 import Link from "next/link";
 
 import { FaStarHalfAlt, FaHeartBroken } from "react-icons/fa";
 import { FiHeart } from "react-icons/fi";
 
-import { PiShoppingCartSimpleBold } from "react-icons/pi";
+import {
+  BsFileEarmarkBarGraph,
+  BsFileEarmarkBarGraphFill
+} from "react-icons/bs";
+
 import {
   BsCartPlus,
   BsCartPlusFill,
@@ -16,13 +24,14 @@ import {
   BsFillCartCheckFill
 } from "react-icons/bs";
 
+import { ProductItemPreviewType } from "@/app/products/page";
+
 export interface IProductItem {
   id: number;
   img: string;
   title: string;
   price: number;
   avgRating: number;
-  searchQuery: string;
 }
 
 const ProductItem = ({
@@ -30,11 +39,17 @@ const ProductItem = ({
   img,
   title,
   price,
-  avgRating,
-  searchQuery
-}: IProductItem) => {
+  category,
+  amount_of_portion,
+  brand,
+  in_stock,
+  made_in,
+  release_form,
+  weight
+}: ProductItemPreviewType) => {
   const cartState = useCartState();
   const favoriteState = useFavoriteState();
+  const comparisonState = useComparisonState();
 
   const isItemFavorite = () => {
     return favoriteState.items.findIndex((v) => v.id === id) === -1
@@ -44,6 +59,12 @@ const ProductItem = ({
 
   const isItemExist = () => {
     return cartState.items.findIndex((v) => v.id === id) === -1 ? false : true;
+  };
+
+  const isItemInComparison = () => {
+    return comparisonState.items.findIndex((v) => v.id === id) === -1
+      ? false
+      : true;
   };
 
   const handleClickCartBtn = () => {
@@ -73,7 +94,16 @@ const ProductItem = ({
     }
   };
 
-  console.log(favoriteState.items);
+  const handleClickComparisonBtn = () => {
+    if (isItemInComparison()) {
+      comparisonState.deleteItemFromComparison(id);
+    } else {
+      comparisonState.addItemToComparison({
+        id,
+        category
+      });
+    }
+  };
 
   return (
     <div className="group/cont  col-span-1  h-full ">
@@ -105,7 +135,7 @@ const ProductItem = ({
           </button>
           <button
             onClick={handleClickCartBtn}
-            className={`rounded-full  group p-2 text-black dark:text-white bg-opac-b-1 dark:bg-opac-w-1  transition-colors text-sm font-semibold group`}
+            className={`rounded-full  group p-2 text-white bg-rose-9  transition-colors text-sm font-semibold group`}
           >
             {isItemExist() ? (
               <div className="transition-transform lg:group-hover:scale-[1.2]">
@@ -119,6 +149,23 @@ const ProductItem = ({
               </div>
             )}
           </button>
+          <button
+            onClick={handleClickComparisonBtn}
+            className={`rounded-full  group p-2 text-white bg-rose-9  transition-colors font-semibold group text-xl`}
+          >
+            {/* <IoGitCompareSharp /> */}
+            {isItemInComparison() ? (
+              <div className="transition-transform lg:group-hover:scale-[1.15]">
+                <BsFileEarmarkBarGraph className="text-xl hidden lg:group-hover:block" />
+                <BsFileEarmarkBarGraphFill className="text-xl block lg:group-hover:hidden" />
+              </div>
+            ) : (
+              <div className="transition-transform lg:group-hover:scale-[1.15]">
+                <BsFileEarmarkBarGraph className="text-xl block lg:group-hover:hidden" />
+                <BsFileEarmarkBarGraphFill className="text-xl hidden lg:group-hover:block" />
+              </div>
+            )}
+          </button>
         </div>
       </div>
       <div className="flex flex-col mt-2 justify-between">
@@ -126,23 +173,19 @@ const ProductItem = ({
           <div className="h-10">
             <Link
               href={`products/${id}`}
-              dangerouslySetInnerHTML={{
-                __html: title.replace(
-                  searchQuery,
-                  `<strong>${searchQuery}</strong>`
-                )
-              }}
               className={`line-clamp-2 hover:underline text-sm text-gray-1 dark:text-gray-15`}
-            ></Link>
+            >
+              {title}
+            </Link>
           </div>
           <div className="flex justify-between">
             <span className="text-xl font-semibold text-gray-2 dark:text-gray-14">
               {price} ₽
             </span>
-            <div className="text-sm text-gray-4 dark:text-gray-12 flex items-center gap-1">
+            {/* <div className="text-sm text-gray-4 dark:text-gray-12 flex items-center gap-1">
               <FaStarHalfAlt className="text-lg dark:text-[#e0f44a]" />
               {avgRating}
-            </div>
+            </div> */}
           </div>
         </div>
         <div className="mt-2">

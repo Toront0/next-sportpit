@@ -14,7 +14,7 @@ export async function GET(req: Request) {
     take: 20,
     skip: +page * 20,
     where: {
-      productId: +productId
+      product_id: +productId
     },
     include: {
       user: {
@@ -55,7 +55,7 @@ export async function POST(req: Request) {
   const res = await prisma.comments.create({
     data: {
       review,
-      productId,
+      product_id: productId,
       rating,
       userId
     }

@@ -15,16 +15,20 @@ export type ProductDetail = {
   img: string;
   title: string;
   price: number;
-  avgRating: number;
+  avgrating: number;
   description: string;
+  category: string;
 };
 
 const ProductDetail = async ({ params }: { params: { slug: string } }) => {
-  const user = await getServerSession(authOptions);
+  const res = await fetch(
+    `http://localhost:3000/api/product-detail/${+params.slug}`,
+    {
+      cache: "no-cache"
+    }
+  );
 
-  const data = await prisma.products.findUnique({
-    where: { id: +params.slug }
-  });
+  const data = (await res.json()) as ProductDetail;
 
   return (
     <div className="w-full h-full overflow-y-auto ">
@@ -40,13 +44,8 @@ const ProductDetail = async ({ params }: { params: { slug: string } }) => {
             <ProductInfo
               id={data?.id}
               title={data?.title}
-              in_stock={data.in_stock}
               category={data.category}
-              amount_of_portion={data.amount_of_portion}
-              brand={data.brand}
-              made_in={data.made_in}
-              release_form={data.release_form}
-              weight={data.weight}
+              avgrating={data.avgrating}
               description={data?.description}
               price={data?.price}
               img={data?.img}

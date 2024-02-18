@@ -13,14 +13,13 @@ const CartItem = ({ id, img, title, price, qty }: ICartItem) => {
   return (
     <div className="flex w-full relative ">
       <div className="flex w-3/5 xl:w-2/5 gap-2">
-        <div className="h-32 aspect-square rounded relative bg-gray-12 dark:bg-gray-4">
+        <div className="h-20 aspect-square rounded relative bg-gray-12 dark:bg-gray-4">
           <Image src={img} alt={title} fill={true} />
         </div>
         <div>
-          <h4 className="text-sm text-gray-4 dark:text-gray-12">{title}</h4>
-          <h5 className="text-sm text-gray-4 dark:text-gray-12">
-            #23113148932
-          </h5>
+          <h4 className=" text-gray-2 font-semibold dark:text-gray-14">
+            {title}
+          </h4>
         </div>
       </div>
       <div className="w-1/5 justify-center hidden xl:flex items-center font-semibold  text-gray-4 dark:text-gray-12">

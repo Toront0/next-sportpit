@@ -3,40 +3,35 @@
 import Header from "@/components/Header/Header";
 import ProductItem, { IProductItem } from "@/components/products/ProductItem";
 import React, { useEffect, useState } from "react";
-
-import img from "/public/protein_2.png";
 import ProductsFilter from "@/components/products/ProductsFilter";
 
-import prisma from "@/lib/db";
 import Pagination from "@/components/UI/Pagination";
 import ProductsSkeleton from "@/components/products/ProductsSkeleton";
-import useSWR from "swr";
-import { fetcher } from "@/lib/helpers/helpers";
-import { useDebouncedValue } from "@/lib/hooks/useDebouncedValue";
 
-type ProductType = {
-  id: number;
-  title: string;
-  img: string;
-  description: string;
-};
-
-type IProductItemPreview = {
+export type ProductItemPreviewType = {
   id: number;
   img: string;
   title: string;
   price: number;
   in_stock: number;
+  weight: number;
+  category: string;
+  brand: string;
+  made_in: string;
+  amount_of_portion: number;
+  release_form: string;
 };
 
 export type ResType = {
-  products: IProductItemPreview[];
+  products: ProductItemPreviewType[];
   count: number;
 };
 
 export type FilterData = {
   brands: string[];
-  madeIn: string[];
+  made_in: string[];
+  release_form: string[];
+  category: string[];
 };
 
 const ProductsPage = () => {
@@ -76,6 +71,8 @@ const ProductsPage = () => {
     handler();
   }, [applyFilters, page]);
 
+  console.log("data", data);
+
   return (
     <div className="w-full h-full">
       <Header />
@@ -107,8 +104,13 @@ const ProductsPage = () => {
                     title={v.title}
                     img={v.img}
                     price={v.price}
-                    avgRating={4.6}
-                    searchQuery={"123"}
+                    category={v.category}
+                    made_in={v.made_in}
+                    release_form={v.release_form}
+                    brand={v.brand}
+                    amount_of_portion={v.amount_of_portion}
+                    in_stock={v.in_stock}
+                    weight={v.weight}
                   />
                 ))}
               </>

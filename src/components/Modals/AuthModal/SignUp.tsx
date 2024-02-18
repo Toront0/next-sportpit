@@ -4,7 +4,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { MdError } from "react-icons/md";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import PasswordInput from "@/components/UI/PasswordInput";
 
 const schema = z
   .object({
@@ -23,7 +24,11 @@ const schema = z
 
 type FormFields = z.infer<typeof schema>;
 
-const SignUp = () => {
+interface ISignUp {
+  setCurrentAuthMethod: Dispatch<SetStateAction<"login" | "signUp">>;
+}
+
+const SignUp = ({ setCurrentAuthMethod }: ISignUp) => {
   const {
     register,
     handleSubmit,
@@ -69,6 +74,10 @@ const SignUp = () => {
         password: data.password
       })
     });
+
+    if (res.status === 201) {
+      setCurrentAuthMethod("login");
+    }
   };
 
   return (
@@ -170,7 +179,7 @@ const SignUp = () => {
           )}
         </div>
 
-        <Input
+        <PasswordInput
           register={register}
           placeholder="********"
           id="password"
@@ -197,7 +206,7 @@ const SignUp = () => {
           )}
         </div>
 
-        <Input
+        <PasswordInput
           register={register}
           placeholder="********"
           id="confirmPassword"
@@ -214,7 +223,7 @@ const SignUp = () => {
       <button
         type="submit"
         disabled={!isValid}
-        className="w-full py-1.5 rounded disabled:cursor-not-allowed disabled:dark:bg-rose-10 disabled:dark:text-gray-8 text-white bg-rose-8 mt-4 text-sm font-medium"
+        className="w-full py-1.5 rounded disabled:bg-rose-5 disabled:text-gray-5 disabled:cursor-not-allowed disabled:dark:bg-rose-10 disabled:dark:text-gray-8 text-white bg-rose-8 mt-4 text-sm font-medium"
       >
         Зарегистрироваться
       </button>

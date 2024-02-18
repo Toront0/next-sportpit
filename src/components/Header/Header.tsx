@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { FaRegHeart } from "react-icons/fa6";
 import { PiShoppingCartSimpleBold } from "react-icons/pi";
-import { IoMdSunny } from "react-icons/io";
 
 import { signOut, useSession } from "next-auth/react";
 
@@ -22,40 +21,13 @@ import { DropdownContent } from "../UI/Dropdown/DropdownContent";
 import DropdownButtonItem from "../UI/Dropdown/DropdownButtonItem";
 
 import { RiLoginBoxLine } from "react-icons/ri";
-import { authOptions } from "@/lib/types/next_auth";
+import { VscGitCompare } from "react-icons/vsc";
 import Toggle from "../UI/Toggle";
-
-const getLocalTheme = () => {
-  if (typeof window !== "undefined") {
-    return localStorage.getItem("theme")
-      ? localStorage.getItem("theme")
-      : "light";
-  }
-
-  // return "light";
-};
+import DropdownLinkItem from "../UI/Dropdown/DropdownLinkItem";
 
 const Header = () => {
   const { data, status } = useSession();
-  // const [theme, setTheme] = useState(() => getLocalTheme());
   const theme = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // const toggleDarkmode = () => {
-  //   if (localStorage.getItem("theme") === "dark") {
-  //     localStorage.setItem("theme", "light");
-  //     setTheme("light");
-  //   } else {
-  //     localStorage.setItem("theme", "dark");
-  //     setTheme("dark");
-  //   }
-
-  //   document.documentElement.classList.toggle("dark");
-  // };
 
   const cartItemsQty = useCartState((s) => s.items).length;
   const [openLoginModal, setOpenLoginModal] = useState(false);
@@ -87,39 +59,45 @@ const Header = () => {
         >
           <FaRegHeart />
         </Link>
-        {!data?.user ? (
+        {!data?.user && (
           <button
             onClick={() => setOpenLoginModal(true)}
             className="px-2 py-1 rounded bg-rose-7 text-white text-sm font-medium"
           >
             Войти
           </button>
-        ) : (
-          <Dropdown>
-            <DropdownTrigger>
-              <button className="text-xl  text-gray-4 dark:text-gray-12">
-                <FiUser />
-              </button>
-            </DropdownTrigger>
-            <DropdownContent>
-              <DropdownButtonItem onClick={theme.toggleTheme}>
-                <div className="w-full flex items-center justify-between">
-                  <div className="flex items-center  gap-2">
-                    <FaMoon className="w-5 h-5" />
-                    Темный режим
-                  </div>
-                  <Toggle checked={theme.theme === "dark"} />
-                </div>
-              </DropdownButtonItem>
-              <DropdownButtonItem onClick={() => signOut()}>
-                <div className="flex items-center  gap-2">
-                  <RiLoginBoxLine className="w-5 h-5" />
-                  Выйти
-                </div>
-              </DropdownButtonItem>
-            </DropdownContent>
-          </Dropdown>
         )}
+
+        <Dropdown>
+          <DropdownTrigger>
+            <button className="text-xl  text-gray-4 dark:text-gray-12">
+              <FiUser />
+            </button>
+          </DropdownTrigger>
+          <DropdownContent>
+            <DropdownLinkItem href="/compare">
+              <div className="flex items-center  gap-2">
+                <VscGitCompare className="w-5 h-5" />
+                Сравнить
+              </div>
+            </DropdownLinkItem>
+            <DropdownButtonItem onClick={theme.toggleTheme}>
+              <div className="w-full flex items-center justify-between">
+                <div className="flex items-center  gap-2">
+                  <FaMoon className="w-5 h-5" />
+                  Темный режим
+                </div>
+                <Toggle checked={theme.theme === "dark"} />
+              </div>
+            </DropdownButtonItem>
+            <DropdownButtonItem onClick={() => signOut()}>
+              <div className="flex items-center  gap-2">
+                <RiLoginBoxLine className="w-5 h-5" />
+                Выйти
+              </div>
+            </DropdownButtonItem>
+          </DropdownContent>
+        </Dropdown>
       </div>
     </div>
   );

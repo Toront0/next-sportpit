@@ -1,16 +1,42 @@
-import { useFavoriteState } from "@/lib/store/store";
+import { useCartState, useFavoriteState } from "@/lib/store/store";
 import { FavoriteItemType } from "@/lib/store/types";
 import Image, { StaticImageData } from "next/image";
 import React from "react";
+import {
+  BsCartPlus,
+  BsCartPlusFill,
+  BsCartXFill,
+  BsFillCartCheckFill
+} from "react-icons/bs";
 import { FaHeartBroken } from "react-icons/fa";
 import { FiHeart } from "react-icons/fi";
 
 import { TbShoppingCartX, TbShoppingCartUp } from "react-icons/tb";
 
 const FavoritesItem = ({ id, title, price, img }: FavoriteItemType) => {
+  const cartState = useCartState();
+
   const deleteItemFromFavorites = useFavoriteState(
     (s) => s.deleteItemFromFavorites
   );
+
+  const isItemExist = () => {
+    return cartState.items.findIndex((v) => v.id === id) === -1 ? false : true;
+  };
+
+  const handleClickCartBtn = () => {
+    if (!isItemExist()) {
+      cartState.addItemToCart({
+        id: id,
+        title: title,
+        img: img,
+        price: price,
+        qty: 1
+      });
+    } else {
+      cartState.removeItemFromCart(id);
+    }
+  };
 
   return (
     <div className="col-span-1 group/cont w-full relative cursor-pointer overflow-hidden ">
@@ -24,10 +50,21 @@ const FavoritesItem = ({ id, title, price, img }: FavoriteItemType) => {
             <FaHeartBroken className="text-xl hidden lg:group-hover:block " />
           </div>
         </button>
-        <button className="flex items-center mt-2 text-black dark:text-white group rounded-full px-2 py-2 gap-2 bg-opac-b-1 dark:bg-opac-w-1 xl:hover:bg-opac-b-2 dark:xl:hover:bg-opac-w-2 ">
-          <div className="transition-transform">
-            <TbShoppingCartX className="text-xl" />
-          </div>
+        <button
+          onClick={handleClickCartBtn}
+          className={`rounded-full my-2  group p-2 text-white bg-rose-9  transition-colors text-sm font-semibold group`}
+        >
+          {isItemExist() ? (
+            <div className="transition-transform lg:group-hover:scale-[1.2]">
+              <BsCartXFill className="text-xl hidden lg:group-hover:block" />
+              <BsFillCartCheckFill className="text-xl block lg:group-hover:hidden" />
+            </div>
+          ) : (
+            <div className="transition-transform lg:group-hover:scale-[1.2]">
+              <BsCartPlus className="text-xl block lg:group-hover:hidden" />
+              <BsCartPlusFill className="text-xl hidden lg:group-hover:block" />
+            </div>
+          )}
         </button>
       </div>
       <div className="w-full aspect-square relative xl:group-hover/cont:brightness-50 bg-opac-b-1 dark:bg-opac-w-1 rounded">

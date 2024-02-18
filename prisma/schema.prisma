@@ -25,6 +25,7 @@ model products {
   weight Int
   amount_of_portion Int
   release_form String
+  comments comments[]
 }
 
 
@@ -48,5 +49,12 @@ model comments {
   review String
   userId Int 
   user users @relation(fields: [userId], references: [id])
-  productId Int 
+  product_id Int 
+  product products @relation(fields: [product_id], references: [id])
+}
+
+model email_codes {
+  id      Int      @id @default(autoincrement())
+  code Int 
+  email String @unique
 }
