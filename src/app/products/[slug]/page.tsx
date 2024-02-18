@@ -21,9 +21,12 @@ export type ProductDetail = {
 };
 
 const ProductDetail = async ({ params }: { params: { slug: string } }) => {
-  const res = await fetch(`/api/product-detail/${+params.slug}`);
-
-  const data = (await res.json()) as ProductDetail;
+  // const res = await fetch(`/api/product-detail/${+params.slug}`);
+  const data = await prisma.products.findUnique({
+    where: {
+      id: +params.slug
+    }
+  });
 
   return (
     <div className="w-full h-full overflow-y-auto ">
@@ -40,7 +43,7 @@ const ProductDetail = async ({ params }: { params: { slug: string } }) => {
               id={data?.id}
               title={data?.title}
               category={data.category}
-              avgrating={data.avgrating}
+              avgrating={5}
               description={data?.description}
               price={data?.price}
               img={data?.img}
