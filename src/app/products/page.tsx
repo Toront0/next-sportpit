@@ -71,8 +71,8 @@ const ProductsPage = () => {
     handler();
   }, [applyFilters, page]);
 
-  console.log(" process.env.VERCEL_URL", process.env.VERCEL_URL);
-  console.log(" process.env.VERCEL", process.env.VERCEL);
+  console.log(" process.env.VERCEL_URL", process.env.NEXT_PUBLIC_VERCEL_URL);
+  console.log(" process.env.VERCEL", process.env.NEXT_PUBLIC_VERCEL);
 
   return (
     <div className="w-full h-full">
