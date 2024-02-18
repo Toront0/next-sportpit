@@ -22,7 +22,7 @@ export type ProductDetail = {
 
 const ProductDetail = async ({ params }: { params: { slug: string } }) => {
   const res = await fetch(
-    `${process.env.VERCEL_URL}/api/product-detail/${+params.slug}`,
+    `${process.env.NEXT_PUBLIC_VERCEL_URL}/api/product-detail/${+params.slug}`,
     {
       cache: "no-cache"
     }

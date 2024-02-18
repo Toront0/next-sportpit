@@ -49,7 +49,7 @@ const ProductsPage = () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `https://next-sportpit.vercel.app/api/products?page=${page}`,
+          `${window.location.origin}/api/products?page=${page}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -70,9 +70,6 @@ const ProductsPage = () => {
 
     handler();
   }, [applyFilters, page]);
-
-  console.log(" process.env.VERCEL_URL", process.env.NEXT_PUBLIC_VERCEL_URL);
-  console.log(" process.env.VERCEL", process.env.NEXT_PUBLIC_VERCEL);
 
   return (
     <div className="w-full h-full">
