@@ -194,7 +194,7 @@ const ComparingItems = ({ chosenCategory }: IComparingItems) => {
                         <div className="flex flex-col items-center gap-2 ">
                           <div className="flex gap-1 text-xs lg:text-base items-center text-black dark:text-[#e0f44a]">
                             {Array.from({ length: 5 }).map((_, i) => (
-                              <div>
+                              <div key={i}>
                                 {v.avg - i >= 1 ? (
                                   <FaStar />
                                 ) : v.avg - i <= 1 && v.avg - i > 0 ? (
