@@ -49,7 +49,7 @@ const ProductsPage = () => {
       try {
         setLoading(true);
         const res = await fetch(
-          `${window.location.origin}/api/products?page=${page}`,
+          `https://next-sportpit.vercel.app/api/products?page=${page}`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
