@@ -48,7 +48,7 @@ const SignUp = ({ setCurrentAuthMethod }: ISignUp) => {
     if (watch("email").length > 1) {
       const handler = async () => {
         const res = await fetch(
-          `http://localhost:3000/api/check-email?email=${watch("email")}`
+          `${window.location.origin}/api/check-email?email=${watch("email")}`
         );
 
         if (res.status === 409) {
@@ -64,7 +64,7 @@ const SignUp = ({ setCurrentAuthMethod }: ISignUp) => {
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     console.log(data);
 
-    const res = await fetch("http://localhost:3000/api/sign-up", {
+    const res = await fetch(`${window.location.origin}/api/sign-up`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
